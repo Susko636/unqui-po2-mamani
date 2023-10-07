@@ -4,20 +4,12 @@ import java.util.List;
 
 public class ActividadSemanal {
 	
-	DiaDeLaSemana dia;
-	double duracion;
-	int horaDeInicio;
-	Deporte deporte;
-	List<ActividadSemanal> actividadesSemanales;
-	
-	public int costoActividadSemanal(Deporte actividad) {
-		if ((dia == DiaDeLaSemana.LUNES)
-			|| (dia == DiaDeLaSemana.MARTES)
-			|| (dia == DiaDeLaSemana.MIERCOLES))
-			return 500 + (200 * actividad.complejidad);
-		else return 1000 + (200 * actividad.complejidad);
-	}
-	
+	private DiaDeLaSemana dia;
+	private double duracion;
+	private int horaDeInicio;
+	private Deporte deporte;
+	private List<ActividadSemanal> actividadesSemanales;
+
 	public ActividadSemanal(DiaDeLaSemana dia, double duracion, int horaDeInicio, Deporte deporte,
 			List<ActividadSemanal> actividadesSemanales) {
 		super();
@@ -28,10 +20,50 @@ public class ActividadSemanal {
 		this.actividadesSemanales = actividadesSemanales;
 	}
 
-	public List<ActividadSemanal> cantidadDeFutbol() {
-		return actividadesSemanales.stream().filter(a->a.equals(Deporte.FUTBOL)).toList();
+	public DiaDeLaSemana getDia() {
+		return dia;
+	}
+
+	public double getDuracion() {
+		return duracion;
+	}
+
+	public int getHoraDeInicio() {
+		return horaDeInicio;
+	}
+
+	public Deporte getDeporte() {
+		return deporte;
+	}
+
+	public List<ActividadSemanal> getActividadesSemanales() {
+		return actividadesSemanales;
 	}
 	
+	public int costoActividadSemanal(Deporte actividad) {
+		int costoBase; 
+		if ((dia == DiaDeLaSemana.LUNES)
+			|| (dia == DiaDeLaSemana.MARTES)
+			|| (dia == DiaDeLaSemana.MIERCOLES)) {
+			costoBase = 500;} 
+		else {costoBase = 1000;}	    
+		int costoComplejidad;
+		costoComplejidad = actividad.getComplejidad() * 200;
+		return costoBase + costoComplejidad;
+	}
+
+	public List<ActividadSemanal> cantidadDeFutbol() {
+		return getActividadesSemanales().stream().filter(a->a.equals(Deporte.FUTBOL)).toList();
+	}
+	
+	public List<ActividadSemanal> actividadesDeComplejidad(int complejidad) {
+		return getActividadesSemanales().stream().filter(a->a.getDeporte().getComplejidad() == complejidad).toList();
+	}
+	
+	public double horasTotalesDeActividades() {
+		return getActividadesSemanales().stream().mapToDouble(ActividadSemanal::getDuracion).sum();
+	}
+		
 	public void agregarActividad(ActividadSemanal actividad) {
 		actividadesSemanales.add(actividad);
 	}
